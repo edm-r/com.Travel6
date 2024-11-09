@@ -1,14 +1,65 @@
 // HomeScreen.js
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar, ScrollView } from 'react-native';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  TouchableOpacity, 
+  SafeAreaView, 
+  StatusBar, 
+  ScrollView 
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BusCard from '../../assets/components/BusCard';
+import styles from './style';
 
 const Home = () => {
+  const navigation = useNavigation();
+
+  const handleBusCardPress = (busInfo) => {
+    navigation.navigate('Seat', {
+      departureTime: busInfo.departureTime,
+      arrivalTime: busInfo.arrivalTime,
+      from: busInfo.from,
+      to: busInfo.to,
+      price: busInfo.price,
+      duration: calculateDuration(busInfo.departureTime, busInfo.arrivalTime),
+      date: "November 27" // Vous pouvez le rendre dynamique plus tard
+    });
+  };
+
+  const calculateDuration = (departure, arrival) => {
+    // Convertir les heures en format 24h pour faciliter le calcul
+    const convertTo24Hour = (time) => {
+      const [hour, minute] = time.match(/\d+/g).map(Number);
+      if (time.includes('PM') && hour !== 12) return [hour + 12, minute];
+      if (time.includes('AM') && hour === 12) return [0, minute];
+      return [hour, minute];
+    };
+
+    const [depHour, depMinute] = convertTo24Hour(departure);
+    const [arrHour, arrMinute] = convertTo24Hour(arrival);
+    
+    let durationHours = arrHour - depHour;
+    let durationMinutes = arrMinute - depMinute;
+    
+    if (durationMinutes < 0) {
+      durationHours -= 1;
+      durationMinutes += 60;
+    }
+
+    if (durationHours < 0) {
+      durationHours += 24;
+    }
+    
+    return `${durationHours}:${String(durationMinutes).padStart(2, '0')}`;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      
+
       {/* Header Section */}
       <View style={styles.headerSection}>
         {/* Header */}
@@ -77,137 +128,55 @@ const Home = () => {
       {/* Results Section */}
       <ScrollView style={styles.resultsSection}>
         <View style={styles.resultsContainer}>
-          <BusCard
-            company="Travel6"
-            busType="Volvo Multi Axle Semi Sleeper (2+2)"
-            departureTime="6:50AM"
-            arrivalTime="12:15PM"
-            from="Baffousam"
-            to="Douala"
-            rating="4.4"
-            seats="34"
-            price="6000"
-            tag="CHEAPEST"
-          />
-          <BusCard
-            company="Travel6"
-            busType="Mercedes Benz Multi-Axle A/C Sleeper (2+1)"
-            departureTime="5:50AM"
-            arrivalTime="10:15AM"
-            from="Yaounde"
-            to="Douala"
-            rating="4.4"
-            seats="4"
-            price="10000"
-            tag="FASTEST"
-          />
+          <TouchableOpacity 
+            onPress={() => handleBusCardPress({
+              departureTime: "6:50AM",
+              arrivalTime: "12:15PM",
+              from: "Baffousam",
+              to: "Douala",
+              price: "6000"
+            })}
+          >
+            <BusCard
+              company="Travel6"
+              busType="Volvo Multi Axle Semi Sleeper (2+2)"
+              departureTime="6:50AM"
+              arrivalTime="12:15PM"
+              from="Baffousam"
+              to="Douala"
+              rating="4.4"
+              seats="34"
+              price="6000"
+              tag="CHEAPEST"
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            onPress={() => handleBusCardPress({
+              departureTime: "5:50AM",
+              arrivalTime: "10:15AM",
+              from: "Yaounde",
+              to: "Douala",
+              price: "10000"
+            })}
+          >
+            <BusCard
+              company="Travel6"
+              busType="Mercedes Benz Multi-Axle A/C Sleeper (2+1)"
+              departureTime="5:50AM"
+              arrivalTime="10:15AM"
+              from="Yaounde"
+              to="Douala"
+              rating="4.4"
+              seats="4"
+              price="10000"
+              tag="FASTEST"
+            />
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#03314B',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 20,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: '#5BA3D4',
-    marginTop: 4,
-  },
-  notificationButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  searchCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    margin: 16,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#EFEFEF',
-    borderRadius: 8,
-    marginBottom: 12,
-    paddingHorizontal: 12,
-    height: 50,
-  },
-  inputIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 8,
-  },
-  walkIcon: {
-    marginLeft: -8,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    color: '#0B2C3D',
-  },
-  swapButton: {
-    position: 'absolute',
-    right: 0,
-    top: 45,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 15,
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    zIndex: 1,
-  },
-  searchButton: {
-    backgroundColor: '#0B2C3D',
-    borderRadius: 8,
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  searchButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  resultsSection: {
-    flex: 1,
-    backgroundColor: '#03314B',
-  },
-  resultsContainer: {
-    padding: 16,
-  },
-});
 
 export default Home;

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import styles from './style';
 
 const BookingCard = ({ date, persons, price, from, to }) => (
   <View style={styles.bookingCard}>
@@ -28,70 +29,5 @@ const BookingCard = ({ date, persons, price, from, to }) => (
     </View>
   </View>
 );
-
-const styles = StyleSheet.create({
-  bookingCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  routeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  cityCode: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#0B2C3D',
-  },
-  cityName: {
-    fontSize: 12,
-    color: '#666',
-  },
-  dotLine: {
-    flex: 1,
-    height: 1,
-    borderStyle: 'dotted',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    marginHorizontal: 10,
-  },
-  detailsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#EFEFEF',
-  },
-  detailItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  icon: {
-    marginRight: 4,
-  },
-  date: {
-    fontSize: 14,
-    color: '#666',
-  },
-  persons: {
-    fontSize: 14,
-    color: '#666',
-  },
-  price: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#0B2C3D',
-  },
-});
 
 export default BookingCard;

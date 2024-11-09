@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import BookingCard from './BookingCard';
 const Tab = createMaterialTopTabNavigator();
-
+import styles from './style';
 // Composants pour chaque onglet
 const ActiveBookings = () => (
   <View style={styles.tabContent}>
@@ -110,45 +110,5 @@ const FilterTabs = () => {
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  tabContent: {
-    flex: 1,
-    backgroundColor: '#F5F5F5',
-    padding: 16,
-  },
-  tabBar: {
-    backgroundColor: '#EFEFEF',
-    elevation: 0,
-    shadowOpacity: 0,
-    borderRadius: 25,
-    marginHorizontal: 16,
-    marginTop: 16,
-    height: 45,
-    padding: 4,
-  },
-  tabBarItem: {
-    padding: 0,
-    margin: 0,
-  },
-  tabItem: {
-    flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  activeTabItem: {
-    backgroundColor: '#03314b',
-  },
-  tabText: {
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  activeTabText: {
-    color: '#FFFFFF',
-  },
-  inactiveTabText: {
-    color: '#666666',
-  },
-});
 
 export default FilterTabs;
