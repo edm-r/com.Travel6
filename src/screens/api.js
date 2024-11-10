@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // L'URL de base de ton API backend
-const apiUrl = 'http://192.168.1.149:3000'; // Remplacez '192.168.x.x' par l'adresse IP de ton ordinateur
+const apiUrl = 'http://192.168.1.149:3000'; // Remplacez '192.168.x.x' par l'adresse IP de votre ordinateur
 
 // Fonction pour obtenir les données d'un client
 export const getClientById = async (id) => {
@@ -10,39 +10,33 @@ export const getClientById = async (id) => {
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération des données du client', error);
-    throw error; // Relancer l'erreur pour gestion ultérieure
+    throw error; 
   }
 };
 
-// Fonction pour créer un nouveau client
-export const createClient = async (clientData) => {
+// Fonction pour obtenir tous les voyages
+export const getAllVoyages = async () => {
   try {
-    const response = await axios.post(`${apiUrl}/api/clients`, clientData);
+    const response = await axios.get(`${apiUrl}/api/voyages`); 
     return response.data;
   } catch (error) {
-    console.error('Erreur lors de la création du client', error);
-    throw error;
+    console.error('Erreur lors de la récupération des voyages', error);
+    throw error; 
   }
 };
 
-// Fonction pour mettre à jour les données d'un client
-export const updateClient = async (id, clientData) => {
+// Fonction pour rechercher les voyages par date et destination
+export const searchVoyages = async (date, destination) => {
   try {
-    const response = await axios.put(`${apiUrl}/api/clients/${id}`, clientData);
-    return response.data;
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour du client', error);
-    throw error;
-  }
-};
+    // Créer un objet avec les paramètres de requête
+    const params = {};
+    if (date) params.date = date;
+    if (destination) params.destination = destination;
 
-// Fonction pour supprimer un client
-export const deleteClient = async (id) => {
-  try {
-    const response = await axios.delete(`${apiUrl}/api/clients/${id}`);
+    const response = await axios.get(`${apiUrl}/api/voyages/search`, { params });
     return response.data;
   } catch (error) {
-    console.error('Erreur lors de la suppression du client', error);
+    console.error('Erreur lors de la recherche des voyages', error);
     throw error;
   }
 };

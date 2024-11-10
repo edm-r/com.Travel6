@@ -1,16 +1,15 @@
-// BusCard.js
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './style';
 
-const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, rating, seats, price, tag }) => (
+const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, rating, seats, price, tag, duration }) => (
   <View style={styles.card}>
     {/* Company Info */}
     <View style={styles.header}>
       <View style={styles.companyInfo}>
         <Image 
-          source={require('./../../assets/images/Travel6_.png')} // Assurez-vous d'avoir cette image dans vos assets
+          source={require('./../../assets/images/Travel6_.png')}
           style={styles.logo}
         />
         <View style={styles.companyDetails}>
@@ -20,10 +19,11 @@ const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, ratin
       </View>
       <View style={[
         styles.tag, 
-        tag === "CHEAPEST" ? styles.cheapestTag : styles.fastestTag,
-        tag === "CHEAPEST" ? styles.cheapestText : styles.fastestText
+        tag === "Classic" ? styles.cheapestTag : styles.fastestTag
       ]}>
-        <Text style={styles.tagText}>{tag}</Text>
+        <Text style={tag === "Classic" ? styles.cheapestText : styles.fastestText}>
+          {tag}
+        </Text>
       </View>
     </View>
 
@@ -34,7 +34,7 @@ const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, ratin
         <Text style={styles.station}>{from}</Text>
       </View>
       <View style={styles.duration}>
-        <Text style={styles.durationText}>4:05hrs</Text>
+        <Text style={styles.durationText}>{duration} hrs</Text> {/* Utiliser la durée dynamique */}
         <View style={styles.line} />
       </View>
       <View>
@@ -53,7 +53,7 @@ const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, ratin
         <Ionicons name="person-outline" size={16} color="#666" />
         <Text style={styles.seatsText}>{seats}</Text>
       </View>
-      <Text style={styles.price}>FCFA{price}</Text>
+      <Text style={styles.price}>FCFA {price}</Text>
     </View>
   </View>
 );
