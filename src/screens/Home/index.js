@@ -128,7 +128,7 @@ const searchVoyages = () => {
 
   const handleBusCardPress = (busInfo) => {
     if (!busInfo.departureDate) {
-      console.error('Departure date is missing:', busInfo);  // Vous pouvez également afficher des informations dans la console pour aider au debugging
+      console.error('Departure date is missing:', busInfo); 
       return;
     }
   
