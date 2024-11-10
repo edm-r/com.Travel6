@@ -4,7 +4,7 @@ import { View, Image, StyleSheet } from 'react-native';
 const Welcom = ({ navigation }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('Tabs');
+      navigation.navigate('Sign_in');
     }, 5000);
 
     return () => clearTimeout(timer); 
