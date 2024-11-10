@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './style';
 
-const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, rating, seats, price, tag, duration }) => (
+const BusCard = ({ company, busType, departureDate, departureTime, arrivalTime, from, to, rating, seats, price, tag, duration }) => (
   <View style={styles.card}>
     {/* Company Info */}
     <View style={styles.header}>
@@ -31,6 +31,7 @@ const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, ratin
     {/* Journey Info */}
     <View style={styles.journey}>
       <View>
+        <Text style={styles.dates}>{departureDate}</Text>
         <Text style={styles.time}>{departureTime}</Text>
         <Text style={styles.station}>{from}</Text>
       </View>
@@ -40,6 +41,7 @@ const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, ratin
         <View style={styles.line} />
       </View>
       <View>
+      <Text style={styles.dates}>{departureDate}</Text>
         <Text style={styles.time}>{arrivalTime}</Text>
         <Text style={styles.station}>{to}</Text>
       </View>

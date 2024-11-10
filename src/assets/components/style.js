@@ -111,8 +111,13 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       marginBottom: 16,
     },
+    dates: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: '#0B2C3D',
+    },
     time: {
-      fontSize: 16,
+      fontSize: 11,
       fontWeight: '600',
       color: '#0B2C3D',
     },
