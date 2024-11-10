@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import BusCard from '../../assets/components/BusCard';
 import styles from './style';
 import { getClientById, getAllVoyages } from '../api';
+import AsyncStorage from '@react-native-async-storage/async-storage';  // Importer AsyncStorage
 
 const Home = () => {
   const [clientData, setClientData] = useState(null);
@@ -22,12 +23,11 @@ const Home = () => {
   const [to, setTo] = useState('');
   const [date, setDate] = useState('');
   const navigation = useNavigation();
-  const clientId = 1;
 
   // Fetch client data
-  const fetchClientData = async () => {
+  const fetchClientData = async (clientId) => {
     try {
-      const data = await getClientById(clientId);
+      const data = await getClientById(clientId);  // Utiliser clientId dynamique
       if (data && data.length > 0) {
         setClientData(data[0]);
       }
@@ -50,31 +50,41 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchClientData();
+    const getClientId = async () => {
+      try {
+        const storedClientId = await AsyncStorage.getItem('clientId');  // Récupérer l'ID du client depuis AsyncStorage
+        if (storedClientId) {
+          const clientId = parseInt(storedClientId, 10);  // Convertir en nombre entier
+          fetchClientData(clientId);  // Passer l'ID dynamique au lieu de l'ID statique
+        }
+      } catch (error) {
+        console.error('Error retrieving client ID from AsyncStorage:', error);
+      }
+    };
+
+    getClientId();  // Appeler cette fonction au lancement du composant
     fetchVoyages();
   }, []);
 
   // Search function to filter voyages based on user input
-const searchVoyages = () => {
-  // Trim the input values to remove any leading or trailing spaces
-  const trimmedFrom = from.trim();
-  const trimmedTo = to.trim();
-  const trimmedDate = date.trim();
+  const searchVoyages = () => {
+    // Trim the input values to remove any leading or trailing spaces
+    const trimmedFrom = from.trim();
+    const trimmedTo = to.trim();
+    const trimmedDate = date.trim();
 
-  const filtered = voyages.filter((voyage) => {
-    const isFromMatch = voyage.ville_depart.toLowerCase().includes(trimmedFrom.toLowerCase());
-    const isToMatch = voyage.ville_arrivee.toLowerCase().includes(trimmedTo.toLowerCase());
+    const filtered = voyages.filter((voyage) => {
+      const isFromMatch = voyage.ville_depart.toLowerCase().includes(trimmedFrom.toLowerCase());
+      const isToMatch = voyage.ville_arrivee.toLowerCase().includes(trimmedTo.toLowerCase());
+      
+      // Check if date matches, only filter by date if it is provided
+      const isDateMatch = trimmedDate ? (voyage.heure_depart && voyage.heure_depart.includes(trimmedDate)) : true;
+
+      return isFromMatch && isToMatch && isDateMatch;
+    });
     
-    // Check if date matches, only filter by date if it is provided
-    const isDateMatch = trimmedDate ? (voyage.heure_depart && voyage.heure_depart.includes(trimmedDate)) : true;
-
-    return isFromMatch && isToMatch && isDateMatch;
-  });
-  
-  setFilteredVoyages(filtered);
-};
-
-  
+    setFilteredVoyages(filtered);
+  };
 
   // Formatters for time and date
   const formatTime = (time) => {
@@ -109,8 +119,6 @@ const searchVoyages = () => {
   
     return `${year}-${month}-${day}`; // Retourne la date sous le format AAAA-MM-JJ
   };
-  
-
 
   const calculateDuration = (departureTime, arrivalTime) => {
     const depDate = new Date(departureTime);
@@ -143,7 +151,7 @@ const searchVoyages = () => {
       date: formatDate(busInfo.heure_depart),
     });
   };
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -255,4 +263,3 @@ const searchVoyages = () => {
 };
 
 export default Home;
-

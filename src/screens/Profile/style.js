@@ -5,6 +5,20 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#f5f6f7',
     },
+    logoutButton: {
+    flexDirection: 'row',
+    backgroundColor: '#e63946',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  logoutText: {
+    color: '#fff',
+    marginLeft: 10,
+    fontSize: 16,
+  },
+
     profileCard: {
       backgroundColor: '#fff',
       flexDirection: 'row',

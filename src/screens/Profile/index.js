@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import {
   View,
@@ -9,28 +10,61 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './style';
 import { getClientById } from '../api'; // Assure-toi que le chemin d'importation est correct
+import AsyncStorage from '@react-native-async-storage/async-storage';  // Importer AsyncStorage
 
 const Profile = () => {
   const [clientData, setClientData] = useState(null); // Stocke les données du client
-  const clientId = 1; // Remplace avec l'ID réel du client
+  const [clientId, setClientId] = useState(null); // ID dynamique du client
 
-  // Fonction pour récupérer les données du client
-  const fetchClientData = async () => {
+  // Fonction pour récupérer l'ID du client depuis AsyncStorage
+  const getClientIdFromStorage = async () => {
     try {
-      console.log('Appel API pour récupérer les données du client...');
-      const data = await getClientById(clientId); // Appel de la fonction pour récupérer les données du client
-      console.log('Données récupérées :', data);
-      setClientData(data[0]); // Prend le premier élément du tableau
+      const storedClientId = await AsyncStorage.getItem('clientId');
+      if (storedClientId) {
+        setClientId(storedClientId);  // Met à jour l'état avec l'ID récupéré
+      }
     } catch (error) {
-      console.error('Erreur lors de la récupération des données du client', error);
+      console.error('Erreur lors de la récupération de l\'ID du client depuis AsyncStorage', error);
     }
   };
 
-  // Charger les données du client au montage du composant
+  // Fonction pour récupérer les données du client
+  const fetchClientData = async () => {
+    if (clientId) {
+      try {
+        console.log('Appel API pour récupérer les données du client...');
+        const data = await getClientById(clientId); // Appel de la fonction pour récupérer les données du client
+        console.log('Données récupérées :', data);
+        setClientData(data[0]); // Prend le premier élément du tableau
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données du client', error);
+      }
+    }
+  };
+
+  // Fonction pour déconnecter l'utilisateur
+  const logout = async () => {
+    try {
+      await AsyncStorage.removeItem('clientId'); // Retire l'ID du client de AsyncStorage
+      console.log('Utilisateur déconnecté');
+      // Rediriger vers une autre page si nécessaire, par exemple, vers la page de connexion.
+      // Exemple : navigation.navigate('Login');
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion', error);
+    }
+  };
+
+  // Charger l'ID du client et les données au montage du composant
   useEffect(() => {
-    console.log('useEffect appelé pour récupérer les données');
-    fetchClientData();
+    console.log('useEffect appelé pour récupérer l\'ID du client');
+    getClientIdFromStorage();  // Récupère l'ID du client depuis AsyncStorage
   }, []);
+
+  useEffect(() => {
+    if (clientId) {
+      fetchClientData();  // Récupère les données du client après avoir obtenu l'ID
+    }
+  }, [clientId]);
 
   // Affiche un message de chargement tant que les données ne sont pas récupérées
   if (!clientData) {
@@ -86,6 +120,15 @@ const Profile = () => {
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* Logout Button */}
+      <TouchableOpacity
+        style={styles.logoutButton}
+        onPress={logout}
+      >
+        <Icon name="log-out-outline" size={24} color="#fff" />
+        <Text style={styles.logoutText}>Déconnexion</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
