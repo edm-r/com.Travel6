@@ -21,6 +21,7 @@ const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, ratin
         styles.tag, 
         tag === "Classic" ? styles.cheapestTag : styles.fastestTag
       ]}>
+        {/* Encapsuler `tag` dans un composant <Text> */}
         <Text style={tag === "Classic" ? styles.cheapestText : styles.fastestText}>
           {tag}
         </Text>
@@ -34,7 +35,8 @@ const BusCard = ({ company, busType, departureTime, arrivalTime, from, to, ratin
         <Text style={styles.station}>{from}</Text>
       </View>
       <View style={styles.duration}>
-        <Text style={styles.durationText}>{duration} hrs</Text> {/* Utiliser la durée dynamique */}
+        {/* Encapsuler `duration` dans un composant <Text> */}
+        <Text style={styles.durationText}>{duration} hrs</Text> 
         <View style={styles.line} />
       </View>
       <View>

@@ -57,20 +57,7 @@ const Home = () => {
     fetchVoyages();
   }, []);
 
-  // Fonction de recherche de voyages
-  const searchVoyages = async () => {
-    try {
-      const query = new URLSearchParams();
-      if (date) query.append('date', date);
-      if (to) query.append('destination', to);
 
-      const response = await fetch(`http://votre-backend-url/voyages/search?${query.toString()}`);
-      const data = await response.json();
-      setVoyages(data); // Met à jour l'état avec les voyages trouvés
-    } catch (error) {
-      console.error('Erreur lors de la recherche des voyages:', error);
-    }
-  };
 
   // Formatage de l'heure en AM/PM
   const formatTime = (time) => {
