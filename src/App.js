@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import routes from '../src/Routes/Routes';  // Importer les routes depuis Routes.js
+import '../src/sreen/Home.css';
 
-function App() {
+const Home = () => {
+  const navigate = useNavigate();
+
+  const handleLoginClick = () => {
+    navigate('/login');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="home-container">
+      <h1 className="home-title">Bienvenue sur le système de gestion</h1>
+      <div className="button-group">
+        <button className="home-button" onClick={handleLoginClick}>login</button>
+      </div>
     </div>
   );
-}
+};
+
+const App = () => {
+  return (
+    <div>
+      <Routes>
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} exact={route.exact} />
+        ))}
+        <Route path="/" element={<Home />} />  {/* Définir Home comme route par défaut */}
+      </Routes>
+    </div>
+  );
+};
 
 export default App;
