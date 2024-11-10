@@ -23,10 +23,19 @@ body, html {
     color: #fff;
   }
   
+  .button-frame {
+    background-color: rgba(255, 255, 255, 0.2); /* Fond transparent */
+    border: 2px solid #ffffff; /* Bordure blanche */
+    border-radius: 12px;       /* Coins arrondis pour un style moderne */
+    padding: 2rem;             /* Espace interne pour éviter que les boutons soient collés aux bords */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Légère ombre pour effet de cadre */
+  }
+  
   .button-group {
     display: flex;
+    flex-direction: column;  /* Aligne les boutons verticalement */
     gap: 1rem;
-    flex-wrap: wrap;
+    align-items: center; /* Centrer les boutons horizontalement */
   }
   
   .home-button {

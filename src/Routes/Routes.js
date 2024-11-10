@@ -12,7 +12,7 @@ import Res from '../sreen/reservations';
 // Définition des routes
 const routes = [
   {
-    path: '/login',
+    path: '/Login',
     element: <Login />,
     exact: true,
   },
