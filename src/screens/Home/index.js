@@ -135,22 +135,27 @@ const Home = () => {
   };
 
   const handleBusCardPress = (busInfo) => {
-    if (!busInfo.departureDate) {
-      console.error('Departure date is missing:', busInfo); 
+    console.log('Voyage Info:', busInfo); // Ajoutez cette ligne pour vérifier les informations du voyage
+    
+    if (!busInfo.id_voyage) {
+      console.error('Voyage ID is missing:', busInfo);
       return;
     }
   
+    // Naviguer vers la page Seat en passant l'id_voyage et autres informations
     navigation.navigate('Seat', {
-      departureDate: busInfo.heure_depart,
+      id_voyage: busInfo.id_voyage,  // Ajout de l'id_voyage dans les paramètres
       departureTime: busInfo.departureTime,
       arrivalTime: busInfo.arrivalTime,
       from: busInfo.from,
       to: busInfo.to,
       price: busInfo.price,
-      duration: calculateDuration(busInfo.departureTime, busInfo.arrivalTime),
-      date: formatDate(busInfo.heure_depart),
+      duration: busInfo.duration,
+      date: busInfo.departureDate,
     });
   };
+  
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -227,10 +232,13 @@ const Home = () => {
       <ScrollView style={styles.resultsSection}>
         <View style={styles.resultsContainer}>
           {filteredVoyages.length === 0 && <Text>Pas de voyage disponible pour le moment.</Text>}
-          {filteredVoyages.map((voyage) => (
-            <TouchableOpacity 
+          {filteredVoyages.map((voyage) => {
+          console.log('Voyage:', voyage);  // Vérifier si l'id_voyage est présent
+          return (
+            <TouchableOpacity
               key={voyage.id_voyage}
               onPress={() => handleBusCardPress({
+                id_voyage: voyage.id_voyage,  
                 departureDate: formatDate(voyage.heure_depart),
                 departureTime: formatTime(voyage.heure_depart),
                 arrivalTime: formatTime(voyage.heure_arrive),
@@ -240,22 +248,24 @@ const Home = () => {
                 duration: calculateDuration(voyage.heure_depart, voyage.heure_arrive),
               })}
             >
-              <BusCard
-                company="Travel6"
-                busType={voyage.nom_classe}
-                departureDate={formatDate(voyage.heure_depart)}
-                departureTime={formatTime(voyage.heure_depart)}
-                arrivalTime={formatTime(voyage.heure_arrive)}
-                from={voyage.ville_depart}
-                to={voyage.ville_arrivee}
-                rating="4.4" 
-                seats={voyage.nombre_de_places}
-                price={voyage.prix_classe}
-                tag={voyage.nom_classe} 
-                duration={calculateDuration(voyage.heure_depart, voyage.heure_arrive)} 
-              />
-            </TouchableOpacity>
-          ))}
+      <BusCard
+        company="Travel6"
+        busType={voyage.nom_classe}
+        departureDate={formatDate(voyage.heure_depart)}
+        departureTime={formatTime(voyage.heure_depart)}
+        arrivalTime={formatTime(voyage.heure_arrive)}
+        from={voyage.ville_depart}
+        to={voyage.ville_arrivee}
+        rating="4.4"
+        seats={voyage.nombre_de_places}
+        price={voyage.prix_classe}
+        tag={voyage.nom_classe}
+        duration={calculateDuration(voyage.heure_depart, voyage.heure_arrive)}
+      />
+    </TouchableOpacity>
+  );
+})}
+
         </View>
       </ScrollView>
     </SafeAreaView>

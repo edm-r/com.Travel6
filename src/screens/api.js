@@ -110,3 +110,57 @@ export const registerClient = async (form) => {
     throw new Error(error.response?.data?.message || 'Erreur d\'inscription');
   }
 };
+
+
+export const getSeats = async (id_voyage) => {
+  try {
+    const token = await getToken(); // Récupérer le token depuis AsyncStorage
+    const response = await axios.get(`${apiUrl}/api/voyages/${id_voyage}/places-with-location`, {
+      headers: {
+        Authorization: `Bearer ${token}` // Ajout du token d'authentification
+      }
+    });
+    return response.data;  // Retourne les places disponibles
+  } catch (error) {
+    console.error('Erreur lors de la récupération des places', error);
+    throw error;
+  }
+};
+
+// Fonction pour obtenir les places réservées d'un voyage
+export const getBookedSeats = async (id_voyage) => {
+  try {
+    const token = await getToken();  // Si vous utilisez un token pour l'authentification
+    const response = await axios.get(`${apiUrl}/api/voyages/${id_voyage}/booked-places`, {
+      headers: {
+        Authorization: `Bearer ${token}`,  // Assurez-vous d'inclure le token d'authentification
+      },
+    });
+
+    // Affichage des données récupérées
+    console.log("Booked Seats Response:", response.data);
+
+    const bookedSeatsData = response.data;  // Assurez-vous que la réponse est bien un tableau
+
+    if (Array.isArray(bookedSeatsData)) {
+      // Si bookedSeatsData est bien un tableau, vous pouvez l'utiliser ici
+      console.log("Booked seats:", bookedSeatsData);
+
+      // Affichage de chaque place réservée avec le numéro de ligne
+      bookedSeatsData.forEach(seat => {
+        console.log(`Place ${seat.numero_place} sur le côté ${seat.cote}, Ligne ${seat.numero_ligne}`);
+      });
+      
+    } else {
+      console.error("Erreur : bookedSeatsData n'est pas un tableau", bookedSeatsData);
+    }
+
+    return bookedSeatsData;
+
+  } catch (error) {
+    console.error("Erreur lors de la récupération des places réservées", error);
+    throw error;
+  }
+};
+
+
