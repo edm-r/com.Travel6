@@ -52,6 +52,22 @@ const styles = StyleSheet.create({
     editButton: {
       padding: 8,
     },
+    inputContainer: {
+  marginBottom: 20,
+  flexDirection: 'column', // Pour que le label et le champ soient alignés verticalement
+},
+inputLabel: {
+  fontSize: 16,
+  marginBottom: 5,  // Espacement entre le label et le champ
+},
+input: {
+  height: 40,
+  borderColor: '#ccc',
+  borderWidth: 1,
+  paddingLeft: 10,
+  fontSize: 16,
+  borderRadius: 5,
+},
     menuContainer: {
       backgroundColor: '#fff',
     },
