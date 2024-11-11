@@ -60,3 +60,16 @@ export const loginUser = async (form) => {
     throw error; // Jeter l'erreur pour qu'elle soit capturée dans le composant
   }
 };
+
+// Dans votre fichier frontend (par exemple api.js)
+export const logoutUser = async () => {
+  try {
+    const token = await getToken();
+    await axios.post(`${apiUrl}/api/auth/logoutClient`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    await AsyncStorage.removeItem('userToken'); // Supprimer le token du stockage local
+  } catch (error) {
+    console.error('Erreur lors de la déconnexion', error);
+  }
+};

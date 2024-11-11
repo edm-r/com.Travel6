@@ -12,7 +12,7 @@ import styles from './style';
 import { getClientById } from '../api'; // Assure-toi que le chemin d'importation est correct
 import AsyncStorage from '@react-native-async-storage/async-storage';  // Importer AsyncStorage
 
-const Profile = () => {
+const Profile = ({ navigation }) => { // Ajouter navigation comme paramètre
   const [clientData, setClientData] = useState(null); // Stocke les données du client
   const [clientId, setClientId] = useState(null); // ID dynamique du client
 
@@ -47,8 +47,7 @@ const Profile = () => {
     try {
       await AsyncStorage.removeItem('clientId'); // Retire l'ID du client de AsyncStorage
       console.log('Utilisateur déconnecté');
-      // Rediriger vers une autre page si nécessaire, par exemple, vers la page de connexion.
-      // Exemple : navigation.navigate('Login');
+      navigation.navigate('Sign_in'); // Rediriger vers la page de connexion
     } catch (error) {
       console.error('Erreur lors de la déconnexion', error);
     }
