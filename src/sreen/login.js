@@ -17,17 +17,15 @@ const Login = () => {
     setCredentials({ ...credentials, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Empêche le rechargement de la page
-    // Ajoutez ici une logique de validation si nécessaire
-    navigate('/Voy'); // Redirige vers la page Voy
+  const handleSubmit = (path) => {
+    navigate(path);  // Rediriger vers la route spécifiée
   };
 
   return (
     <div className="login-container">
       <div className="login-card">
         <h2 className="text-center custom-title">Se Connecter</h2>
-        <form onSubmit={handleSubmit}>
+        <form >
           <input
             type="text"
             className="form-control custom-input"
@@ -46,9 +44,7 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-          <button type="submit" className="btn custom-btn w-100">
-            Se connecter
-          </button>
+          <button type="submit" className="btn custom-btn w-100" onClick={() => handleSubmit('/Home')}> Se connecter </button>
         </form>
       </div>
     </div>

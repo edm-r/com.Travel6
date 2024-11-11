@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import routes from '../src/Routes/Routes';  // Importer les routes depuis Routes.js
-import '../src/sreen/Home.css';
+import routes from '../Routes/Routes';  // Importer les routes depuis Routes.js
+import '../sreen/Home.css';
 
 const Home = () => {
   const navigate = useNavigate();

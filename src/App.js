@@ -1,57 +1,41 @@
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../src/sreen/login.css';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import routes from '../src/Routes/Routes';
+import React from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import routes from '../src/Routes/Routes';  // Importer les routes depuis Routes.js
+import '../src/sreen/Home.css';
 
-const Login = () => {
+const Home = () => {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState({
-    username: '',
-    password: '',
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials({ ...credentials, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Empêche le rechargement de la page
-    // Ajoutez ici une logique de validation si nécessaire
-    navigate('/'); // Redirige vers la page Home (route par défaut)
+  const handleNavigate = (path) => {
+    navigate(path);  // Rediriger vers la route spécifiée
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h2 className="text-center custom-title">Se Connecter</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            className="form-control custom-input"
-            name="username"
-            placeholder="Nom d'utilisateur"
-            value={credentials.username}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            className="form-control custom-input"
-            name="password"
-            placeholder="Mot de passe"
-            value={credentials.password}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit" className="btn custom-btn w-100">
-            Se connecter
-          </button>
-        </form>
+    <div className="home-container">
+      <div class="title-frame">
+        <h1 class="home-title">Bienvenue sur le système de gestion</h1>
+    </div>
+      <div className="button-group">
+        <button className="home-button" onClick={() => handleNavigate('/Client')}>Clients</button>
+        <button className="home-button" onClick={() => handleNavigate('/Employes')}>Employés</button>
+        <button className="home-button" onClick={() => handleNavigate('/Voy')}>Voyages</button>
+        <button className="home-button" onClick={() => handleNavigate('/Res')}>Réservations</button>
       </div>
     </div>
   );
 };
 
-export default Login;
+const App = () => {
+  return (
+    <div>
+      <Routes>
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} exact={route.exact} />
+        ))}
+        <Route path="/" element={<Home />} />  {/* Définir Home comme route par défaut */}
+      </Routes>
+    </div>
+  );
+};
+
+export default App;

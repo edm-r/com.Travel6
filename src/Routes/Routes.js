@@ -6,6 +6,7 @@ import Employes from '../sreen/employes';
 import Client from '../sreen/clients';
 import Voy from '../sreen/voyages';
 import Res from '../sreen/reservations';
+import Home from '../sreen/Home';
 
 
 
@@ -39,6 +40,11 @@ const routes = [
   {
     path: '/Res',
     element: <Res />,
+    exact: true,
+  },
+  {
+    path: '/Home',
+    element: <Home />,
     exact: true,
   },
 
