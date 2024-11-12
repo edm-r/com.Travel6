@@ -16,6 +16,15 @@ const Employes = () => {
     setEmployees([...employees, { ...employee, id: Date.now() }]);
   };
 
+  const handleDelete = (id) => {
+    setEmployees(employees.filter(employee => employee.id !== id));
+  };
+
+  const handleEdit = (employee) => {
+    // Ajoutez ici la logique pour modifier un employé
+    console.log("Modifier l'employé:", employee);
+  };
+
   // Mettre à jour l'horaire de départ
   const updateDepartureTime = (newTime) => {
     setDepartureTimes([...departureTimes, { ...newTime, id: Date.now() }]);
@@ -32,6 +41,10 @@ const Employes = () => {
             <EmployeeForm addEmployee={addEmployee} />
           </div>
         </div>
+
+        <div>
+      <EmployeeList employees={employees} onDelete={handleDelete} onEdit={handleEdit} />
+       </div>
 
         {/* Liste des employés */}
         <div className="card mb-4 custom-card">
