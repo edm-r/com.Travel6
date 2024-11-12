@@ -7,11 +7,16 @@ import {
   StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import styles from './style';
 
 const Payment_S = () => {
   const navigation = useNavigation();
+  const route = useRoute(); // Récupérer les paramètres passés à cette page
+
+  // Extraire tous les paramètres passés via la navigation
+  const { from, to, seats, price, paymentMethod, userName, age, userPhone,departureTime,arrivalTime, gender, sendMail } = route.params || {}; 
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
@@ -39,7 +44,26 @@ const Payment_S = () => {
 
       {/* Footer Button */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.viewTicketButton} onPress={() => navigation.navigate('Ticket_D')}>
+        <TouchableOpacity 
+          style={styles.viewTicketButton} 
+          onPress={() => 
+            navigation.navigate('Ticket_D', {
+              
+              departureTime,
+              arrivalTime,
+              from,
+              to,
+              seats,
+              price,
+              paymentMethod,
+              userName,
+              age,
+              userPhone,
+              gender,
+              sendMail
+            })
+          }
+        >
           <Text style={styles.viewTicketText}>View Ticket</Text>
         </TouchableOpacity>
       </View>

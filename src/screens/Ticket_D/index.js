@@ -7,10 +7,40 @@ import {
   Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import styles from './style';
-import { useNavigation } from '@react-navigation/native';
+
 const Ticket_D = () => {
   const navigation = useNavigation();
+  const route = useRoute(); // Récupérer les paramètres passés à cette page
+
+  // Extraire tous les paramètres passés à cette page
+  const {
+    from,
+    to,
+    seats,
+    price,
+    paymentMethod,
+    userName,
+    age,
+    userPhone,
+    gender,
+    sendMail,
+    departureTime, // Heure de départ
+    arrivalTime,   // Heure d'arrivée
+  } = route.params || {}; // Valeur par défaut vide
+
+  // Calculer le nombre de passagers (si "seats" est un tableau)
+  const numberOfPeople = seats ? seats.length : 0;
+
+  // Générer un numéro de ticket aléatoire
+  const generateTicketNumber = () => {
+    return 'TCKT' + Math.floor(Math.random() * 1000000).toString(); // Exemple de numéro de ticket
+  };
+
+  // Récupérer les sièges choisis (si applicable)
+  const seatNumbers = seats ? seats.join(', ') : 'N/A';
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -28,29 +58,28 @@ const Ticket_D = () => {
           <View style={styles.companySection}>
             <View style={styles.companyHeader}>
               <View style={styles.logoContainer}>
-                <Image 
+                <Image
                   source={require('../../assets/images/Travel6_.png')}
                   style={styles.logo}
                 />
                 <Text style={styles.companyName}>Travel6</Text>
               </View>
             </View>
-            <Text style={styles.busType}>Mercedes Benz Multi Axle A/C Sleeper (2+1)</Text>
           </View>
 
           {/* Journey Details */}
           <View style={styles.journeySection}>
             <View style={styles.locationContainer}>
               <View style={styles.locationInfo}>
-                <Text style={styles.stationName}>Yaounde</Text>
-                <Text style={styles.dateTime}>Oct 10, 5:50am</Text>
+                <Text style={styles.stationName}>{from}</Text> {/* Affiche la ville de départ */}
+                <Text style={styles.dateTime}>{departureTime || 'Oct 10, 5:50am'}</Text> {/* Affiche l'heure de départ */}
               </View>
               <View style={styles.busIconContainer}>
                 <Icon name="bus-outline" size={20} color="#1a2b47" />
               </View>
               <View style={styles.locationInfo}>
-                <Text style={styles.stationName}>Douala</Text>
-                <Text style={styles.dateTime}>Oct 10, 11:15am</Text>
+                <Text style={styles.stationName}>{to}</Text> {/* Affiche la ville d'arrivée */}
+                <Text style={styles.dateTime}>{arrivalTime || 'Oct 10, 11:15am'}</Text> {/* Affiche l'heure d'arrivée */}
               </View>
             </View>
           </View>
@@ -62,30 +91,32 @@ const Ticket_D = () => {
             <View style={styles.gridRow}>
               <View style={styles.gridItem}>
                 <Text style={styles.gridLabel}>Passengers</Text>
-                <Text style={styles.gridValue}>1 Adults</Text>
+                <Text style={styles.gridValue}>
+                  {numberOfPeople} Personne{numberOfPeople > 1 ? 's' : ''}
+                </Text> {/* Nombre de passagers */}
               </View>
               <View style={styles.gridItem}>
                 <Text style={styles.gridLabel}>Seat No.</Text>
-                <Text style={styles.gridValue}>S11-W10</Text>
+                <Text style={styles.gridValue}>{seatNumbers}</Text> {/* Affiche les sièges choisis */}
               </View>
               <View style={styles.gridItem}>
                 <Text style={styles.gridLabel}>Ticket No.</Text>
-                <Text style={styles.gridValue}>42WL494</Text>
+                <Text style={styles.gridValue}>{generateTicketNumber()}</Text> {/* Numéro de ticket généré automatiquement */}
               </View>
             </View>
 
             <View style={styles.gridRow}>
               <View style={styles.gridItem}>
                 <Text style={styles.gridLabel}>Passenger Name</Text>
-                <Text style={styles.gridValue}>Edmond Yopa</Text>
+                <Text style={styles.gridValue}>{userName}</Text> {/* Nom du passager */}
               </View>
               <View style={styles.gridItem}>
                 <Text style={styles.gridLabel}>Ticket Fare</Text>
-                <Text style={styles.gridValue}>FCFA10000</Text>
+                <Text style={styles.gridValue}>FCFA {price}</Text> {/* Prix du billet */}
               </View>
               <View style={styles.gridItem}>
-                <Text style={styles.gridLabel}>Rest Stops</Text>
-                <Text style={styles.gridValue}>1 Stop</Text>
+                <Text style={styles.gridLabel}>Payment Method</Text>
+                <Text style={styles.gridValue}>{paymentMethod}</Text> {/* Méthode de paiement */}
               </View>
             </View>
           </View>
@@ -98,7 +129,7 @@ const Ticket_D = () => {
           </View>
         </View>
 
-               {/* Help Section */}
+        {/* Help Section */}
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Help</Text>
           <TouchableOpacity style={styles.chatButton}>

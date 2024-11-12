@@ -161,7 +161,7 @@ const SeatReservation = ({ route, navigation }) => {
 
       {/* Affichage du prix total */}
       <View style={styles.priceContainer}>
-        <Text style={styles.priceText}>Prix total: {totalPrice} €</Text>
+        <Text style={styles.priceText}>Prix total: {totalPrice} FCFA</Text>
       </View>
 
       {/* Bouton de confirmation */}

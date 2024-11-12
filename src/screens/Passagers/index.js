@@ -21,21 +21,27 @@ const Passenger = () => {
   const { departureTime, arrivalTime, from, to, price, date, seats } = route.params;
 
   const [gender, setGender] = useState('male');
-  const [userName, setUserName] = useState('');
-  const [userPhone, setUserPhone] = useState('');
-  const [sendMail, setSendMail] = useState(false);
-  const [reservations, setReservations] = useState([]); // État pour stocker les réservations de l'utilisateur
+  const [userName, setUserName] = useState(''); // Nom de l'utilisateur
+  const [userPhone, setUserPhone] = useState(''); // Numéro de téléphone
+  const [userBirthday, setUserBirthday] = useState(''); // Date de naissance
+  const [age, setAge] = useState(null); // Âge de l'utilisateur
+  const [sendMail, setSendMail] = useState(false); // Etat pour le switch email
+  const [reservations, setReservations] = useState([]); // Réservations de l'utilisateur
 
   useEffect(() => {
-    // Fonction pour récupérer l'ID du client depuis AsyncStorage et obtenir les informations du client
     const fetchClientData = async () => {
       try {
         const clientId = await AsyncStorage.getItem('userId');
         if (clientId) {
-          // Récupérer les données du client
+          // Récupérer les données du client depuis l'API
           const clientData = await getClientById(clientId);
-          setUserName(clientData.nom_client); // Exemple de champ, adapte selon la réponse de l'API
-          setUserPhone(clientData.telephone_client); // Exemple de champ, adapte selon la réponse de l'API
+          setUserName(clientData.nom_client);
+          setUserPhone(clientData.telephone_client);
+          setUserBirthday(clientData.date_nais); // On récupère la date de naissance
+          
+          // Calculer l'âge basé sur la date de naissance
+          const calculatedAge = calculateAge(clientData.date_nais);
+          setAge(calculatedAge);
 
           // Récupérer les réservations de l'utilisateur
           const userReservations = await getReservations(clientId);
@@ -48,6 +54,36 @@ const Passenger = () => {
 
     fetchClientData();
   }, []);
+
+  // Fonction pour calculer l'âge en fonction de la date de naissance
+  const calculateAge = (dateOfBirth) => {
+    const birthDate = new Date(dateOfBirth); 
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const month = today.getMonth();
+    if (month < birthDate.getMonth() || (month === birthDate.getMonth() && today.getDate() < birthDate.getDate())) {
+      age--; // Si l'anniversaire n'est pas encore passé cette année, on ajuste l'âge
+    }
+    return age;
+  };
+
+  // Fonction de navigation avec tous les paramètres
+  const handlePaymentNavigation = () => {
+    navigation.navigate('Payment', {
+      departureTime,
+      arrivalTime,
+      from,
+      to,
+      price,
+      date,
+      seats,
+      userName,
+      age,
+      userPhone,
+      gender,
+      sendMail,
+    });
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -82,20 +118,20 @@ const Passenger = () => {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionLabel}>Passenger details:</Text>
-            <TouchableOpacity style={styles.addPassengerButton}>
-              <Text style={styles.addPassengerText}>+ Add Passenger</Text>
-            </TouchableOpacity>
           </View>
 
+          {/* Name Field */}
           <View style={styles.formGroup}>
             <Text style={styles.label}>Name</Text>
             <TextInput
               style={styles.input}
               placeholderTextColor="#999"
-              value={userName}  // Utilise le nom de l'utilisateur récupéré
+              value={userName}
+              onChangeText={setUserName} // Permet de mettre à jour le nom
             />
           </View>
 
+          {/* Age Field */}
           <View style={styles.formRow}>
             <View style={styles.ageContainer}>
               <Text style={styles.label}>Age</Text>
@@ -103,43 +139,35 @@ const Passenger = () => {
                 style={styles.input}
                 keyboardType="numeric"
                 placeholderTextColor="#999"
+                value={age ? age.toString() : ''}
+                onChangeText={(text) => setAge(parseInt(text))} // Permet de changer l'âge
               />
             </View>
+
+            {/* Gender Section */}
             <View style={styles.genderContainer}>
               <Text style={styles.label}>Gender</Text>
               <View style={styles.genderOptions}>
-                <TouchableOpacity 
-                  style={styles.genderOption} 
+                <TouchableOpacity
+                  style={styles.genderOption}
                   onPress={() => setGender('male')}
                 >
                   <View style={styles.radioContainer}>
-                    <View style={[
-                      styles.radioOuter,
-                      gender === 'male' && styles.radioOuterSelected
-                    ]}>
+                    <View style={[styles.radioOuter, gender === 'male' && styles.radioOuterSelected]}>
                       {gender === 'male' && <View style={styles.radioInner} />}
                     </View>
-                    <Text style={[
-                      styles.genderText,
-                      gender === 'male' && styles.genderTextSelected
-                    ]}>Male</Text>
+                    <Text style={[styles.genderText, gender === 'male' && styles.genderTextSelected]}>Male</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.genderOption}
                   onPress={() => setGender('female')}
                 >
                   <View style={styles.radioContainer}>
-                    <View style={[
-                      styles.radioOuter,
-                      gender === 'female' && styles.radioOuterSelected
-                    ]}>
+                    <View style={[styles.radioOuter, gender === 'female' && styles.radioOuterSelected]}>
                       {gender === 'female' && <View style={styles.radioInner} />}
                     </View>
-                    <Text style={[
-                      styles.genderText,
-                      gender === 'female' && styles.genderTextSelected
-                    ]}>Female</Text>
+                    <Text style={[styles.genderText, gender === 'female' && styles.genderTextSelected]}>Female</Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -156,6 +184,7 @@ const Passenger = () => {
               style={styles.input}
               keyboardType="email-address"
               placeholderTextColor="#999"
+              // Ajoute ici la gestion de l'email si nécessaire
             />
           </View>
           <View style={styles.formGroup}>
@@ -164,7 +193,8 @@ const Passenger = () => {
               style={styles.input}
               keyboardType="phone-pad"
               placeholderTextColor="#999"
-              value={userPhone}  // Utilise le numéro de téléphone récupéré
+              value={userPhone}
+              onChangeText={setUserPhone} // Permet de mettre à jour le numéro de téléphone
             />
           </View>
           <View style={styles.checkboxContainer}>
@@ -184,7 +214,7 @@ const Passenger = () => {
             <Text style={styles.totalLabel}>Total</Text>
             <Text style={styles.totalAmount}>{price} FCFA</Text>
           </View>
-          <TouchableOpacity style={styles.payButton} onPress={() => navigation.navigate('Payment')}>
+          <TouchableOpacity style={styles.payButton} onPress={handlePaymentNavigation}>
             <Text style={styles.payButtonText}>Continue to pay</Text>
           </TouchableOpacity>
         </View>
