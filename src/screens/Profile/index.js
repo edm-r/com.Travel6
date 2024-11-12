@@ -22,12 +22,11 @@ const Profile = ({ navigation }) => {
   }); // Pour stocker les données à modifier
 
   const menuItems = [
-    { id: 'bookings', icon: 'ticket-outline', title: 'Bookings' },
-    { id: 'offers', icon: 'pricetag-outline', title: 'Offers' },
-    { id: 'faq', icon: 'time-outline', title: 'FAQ\'s & Support' },
-    { id: 'about', icon: 'information-circle-outline', title: 'About Us' }
+    { id: 'FilterTabs', icon: 'ticket-outline', title: 'FilterTabs', screen: 'FilterTabs' },
+    { id: 'offers', icon: 'pricetag-outline', title: 'Offers', screen: 'OffersScreen' },
+    { id: 'faq', icon: 'time-outline', title: 'FAQ\'s & Support', screen: 'FaqScreen' },
+    { id: 'about', icon: 'information-circle-outline', title: 'About Us', screen: 'AboutScreen' }
   ];
-
   const getClientIdFromStorage = async () => {
     try {
       const storedClientId = await AsyncStorage.getItem('clientId');
@@ -73,12 +72,13 @@ const Profile = ({ navigation }) => {
 
   const logout = async () => {
     try {
-      await AsyncStorage.removeItem('clientId');
-      navigation.navigate('Sign_in');
+      await AsyncStorage.clear(); // Supprime toutes les données stockées dans AsyncStorage
+      navigation.navigate('Sign_in'); // Redirige l'utilisateur vers la page de connexion
     } catch (error) {
       console.error('Erreur lors de la déconnexion', error);
     }
   };
+  
 
   // Fonction pour formater la date de naissance
   const formatDate = (dateString) => {
@@ -220,6 +220,7 @@ const Profile = ({ navigation }) => {
             <TouchableOpacity
               key={item.id}
               style={styles.menuItem}
+              onPress={() => navigation.navigate(item.screen)} // Navigation vers l'écran associé
             >
               <View style={styles.menuItemLeft}>
                 <Icon name={item.icon} size={22} color="#002147" style={styles.menuIcon} />

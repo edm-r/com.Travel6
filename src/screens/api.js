@@ -9,6 +9,25 @@ const getToken = async () => {
   return token;
 };
 
+
+
+// Fonction pour vérifier la validité du token
+export const validateToken = async () => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${apiUrl}/api/auth/validateToken`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.status === 200;
+  } catch (error) {
+    console.error("Token invalide ou expiré", error);
+    return false;
+  }
+};
+
+
 // Fonction pour obtenir les données du client avec le token
 export const getClientById = async (id) => {
   try {
@@ -163,4 +182,48 @@ export const getBookedSeats = async (id_voyage) => {
   }
 };
 
+// Fonction pour obtenir toutes les réservations de l'utilisateur connecté
+export const getUserReservations = async () => {
+  try {
+    const token = await getToken();
+    const response = await axios.get(`${apiUrl}/api/reservations/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data; // Retourner les réservations
+  } catch (error) {
+    console.error("Erreur lors de la récupération des réservations", error);
+    throw error; // Relancer l'erreur
+  }
+};
 
+
+export const getReservations = async (clientId) => {
+  try {
+    const token = await AsyncStorage.getItem('userToken');
+    const response = await axios.get(`${apiUrl}/api/reservations/client/${clientId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data; // Retourne les réservations
+  } catch (error) {
+    console.error('Erreur lors de la récupération des réservations', error);
+    return [];
+  }
+};
+export const getReservationsStatus = async (clientId, status) => {
+  try {
+    const token = await AsyncStorage.getItem('userToken');
+    const response = await axios.get(`${apiUrl}/api/reservations/client/${clientId}/status/${status}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data; // Retourne les réservations filtrées par statut
+  } catch (error) {
+    console.error('Erreur lors de la récupération des réservations', error);
+    return []; // Retourne un tableau vide en cas d'erreur
+  }
+};

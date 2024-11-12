@@ -187,7 +187,7 @@ const Seat = () => {
 
       {/* Date */}
       <View style={styles.dateContainer}>
-        <Text style={styles.dateText}>{date}</Text>
+        <Text style={styles.dateText}>{date}</Text>d
       </View>
 
       {/* Main Content */}

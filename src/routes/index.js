@@ -16,6 +16,7 @@ import Passenger from '../screens/Passagers';
 import Payment from '../screens/Payment';
 import Payment_S from '../screens/payment_s';
 import Seat from '../screens/Seat';
+import FilterTabs from '../assets/components/FilterTabs.js';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -73,6 +74,7 @@ const Routes = () => {
                 <Stack.Screen name="Payment_S" component={Payment_S} options={{ headerShown: false }} />
                 <Stack.Screen name="Seat" component={Seat} options={{ headerShown: false }} />
                 <Stack.Screen name="Welcom" component={Welcom} options={{ headerShown: false }} />
+                <Stack.Screen name="FilterTabs" component={FilterTabs} options={{ headerShown: false }} />
                 <Stack.Screen name="Tabs" component={TabNavigator} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
