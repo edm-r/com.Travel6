@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../sreen/login.css';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import routes from '../Routes/Routes';
 
 const Login = () => {
   const navigate = useNavigate();
