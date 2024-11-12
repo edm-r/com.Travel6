@@ -1,0 +1,45 @@
+/* Fond avec dégradé bleu ciel */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #87CEFA, #B0E0E6);
+  }
+  
+  .signup-card {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .custom-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1.5rem;
+  }
+  
+  .custom-input {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .custom-btn {
+    background-color: #87CEFA;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0.8rem;
+    transition: background-color 0.3s;
+  }
+  
+  .custom-btn:hover {
+    background-color: #6495ED;
+  }
+  

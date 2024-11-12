@@ -8,17 +8,12 @@ import DepartureTimeConfig from '../sreen/DepartureTimeConfig';
 
 const Employes = () => {
   const [employees, setEmployees] = useState([]);
-  const [actions, setActions] = useState([]);
+  
   const [departureTimes, setDepartureTimes] = useState([]);
 
   // Ajouter ou modifier un employé
   const addEmployee = (employee) => {
     setEmployees([...employees, { ...employee, id: Date.now() }]);
-  };
-
-  // Ajouter une action à l'historique
-  const addAction = (action) => {
-    setActions([...actions, { ...action, id: Date.now() }]);
   };
 
   // Mettre à jour l'horaire de départ
@@ -42,13 +37,6 @@ const Employes = () => {
         <div className="card mb-4 custom-card">
           <div className="card-body">
             <EmployeeList employees={employees} />
-          </div>
-        </div>
-
-        {/* Historique des actions */}
-        <div className="card mb-4 custom-card">
-          <div className="card-body">
-            <ActionHistory actions={actions} />
           </div>
         </div>
 
