@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, Button, SafeAreaView } from 'react-native';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { fetchSeatsData } from '../api'; // Importer la fonction de l'API
 
-const SeatReservation = ({ route, navigation }) => {
+const SeatReservation = ({ route }) => {
   const { departureTime, arrivalTime, from, to, price, duration, date, id_voyage } = route.params;
 
   const [seatsData, setSeatsData] = useState({
@@ -16,10 +16,11 @@ const SeatReservation = ({ route, navigation }) => {
   const [seatPrice] = useState(price); // Prix par siège récupéré depuis les paramètres
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSeatsData = async () => {
       try {
-        const data = await fetchSeatsData(id_voyage); // Appel à l'API pour récupérer les sièges
+        const response = await axios.get(`http://192.168.1.176:3000/api/voyages/${id_voyage}/seats`);
         
+        const data = response.data;
         if (data) {
           const occupiedSeats = data.places_occupees
             ? data.places_occupees.split(',').map(place => parseInt(place, 10)) // Convertir les id_place en nombre
@@ -33,12 +34,12 @@ const SeatReservation = ({ route, navigation }) => {
           });
         }
       } catch (error) {
-        console.error('Erreur lors de la récupération des données des sièges:', error);
+        console.error("Erreur lors de la récupération des données des sièges:", error);
       }
     };
 
-    fetchData();
-  }, [id_voyage]); // On relance l'effet lorsque l'id_voyage change
+    fetchSeatsData();
+  }, [id_voyage]);
 
   // Calcul du nombre de rangées et des sièges par rangée
   const getRowsAndSeats = () => {
@@ -104,16 +105,8 @@ const SeatReservation = ({ route, navigation }) => {
 
   const handleConfirm = () => {
     if (selectedSeats.length > 0) {
-      // Naviguer vers l'écran "Passenger" en passant les informations nécessaires
-      navigation.navigate('Passenger', {
-        departureTime,
-        arrivalTime,
-        from,
-        to,
-        price: totalPrice,
-        seats: selectedSeats,
-        seatPositions: selectedSeats, // Vous pouvez personnaliser cette donnée selon le besoin
-      });
+      alert(`Sièges réservés : ${selectedSeats.join(', ')}`);
+      console.log("Sièges confirmés:", selectedSeats);
     } else {
       Alert.alert("Aucune place sélectionnée", "Veuillez sélectionner au moins un siège avant de confirmer.");
     }

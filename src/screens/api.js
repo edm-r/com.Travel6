@@ -227,3 +227,30 @@ export const getReservationsStatus = async (clientId, status) => {
     return []; // Retourne un tableau vide en cas d'erreur
   }
 };
+
+
+// Fonction pour récupérer les informations des sièges d'un voyage
+export const getSeatsForVoyage = async (voyageId) => {
+  try {
+    const token = await getToken(); // Récupérer le token depuis AsyncStorage
+    const response = await axios.get(`${apiUrl}/api/voyages/${voyageId}/seats`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Ajout du token dans les headers
+      },
+    });
+    return response.data; // Retourne les données des sièges
+  } catch (error) {
+    console.error('Erreur lors de la récupération des informations des sièges:', error);
+    throw error;
+  }
+};
+
+export const fetchSeatsData = async (id_voyage) => {
+  try {
+    const response = await axios.get(`${apiUrl}/api/voyages/${id_voyage}/seats`);
+    return response.data; // Retourne directement les données de l'API
+  } catch (error) {
+    console.error('Erreur lors de la récupération des données des sièges:', error);
+    throw error; // Lancer l'erreur pour la gérer dans le composant
+  }
+};

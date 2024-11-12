@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     femaleSeat: {
       borderColor: '#ff69b4',
     },
-    greySeat: {
+    occupiedSeat: {
       backgroundColor: '#f5f5f5',
       borderColor: '#ddd',
     },
